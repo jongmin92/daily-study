@@ -18,4 +18,17 @@
 >>
 >> 참고) https://m.blog.naver.com/PostView.nhn?blogId=tipsware&logNo=221537443580&proxyReferer=https%3A%2F%2Fwww.google.com%2F
 
-
+## 64비트 기반 프로그래밍
+- 64비트 기반 프로그래밍
+    - 64비트 시스템을 고려한 프로그래밍으로 자료형에 대해서 고려해야 한다.
+    - 데이터 손실의 문제 (64비트 시스템에서 포인터(배열 이름)는 8바이트, int는 4바이트)
+    - 포인터를 절대 기본자료형으로 캐스팅하지 말자.
+        ```c
+        #include <stdio.h>
+        int main(void) {
+            int arr[10] = {0, };
+            int arrVal = (int)arr;  // 데이터 손실이 발생할 수 있는 위치
+            printf("pointer: %d\n", arrVal);
+            return 0;
+        }
+        ```
