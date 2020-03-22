@@ -4,7 +4,6 @@
     - https://www.youtube.com/watch?v=wfcpJl3miOs&list=PLVsNizTWUw7E2KrfnsyEjTqo-6uKiQoxc&index=4
 - 참고
     - https://cjwoov.tistory.com/20?category=800243
-    - 
 
 ## 문자셋의 종류와 특성
 - **SBCS** (Single Byte Character Set)
