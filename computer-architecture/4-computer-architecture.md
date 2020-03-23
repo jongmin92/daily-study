@@ -85,20 +85,12 @@ STORE  r3,  0x30        // r3에 저장된 값을 0x30번지에 저장
 
 
 # Direct 모드와 Indirect 모드
+- 하나의 명령어에 여러 정보를 담다 보니 표현하는 데이터 크기에 제한이 생기는 문제가 발생함.
+    - ex) LOAD 명령어의 메인 메모리의 주소 값을 나태니는 source가 0x0000~0x00ff 까지 밖에 표현하지 못함.
+- 기존의 방식으로 메모리의 모든 영역에 대한 접근이 불가능하다.
+- 이를 해결하기 위해 Indirect Addressing Mode가 등장함.
 
+- **Direct Addressing Mode**: 명령어에서 지정하는 위치의 메모리를 참조하는 방식.
+- **Indirect Addressing Mode**: 명령어에서 지정하는 위치에 저장된 값을 주소값으로 하여 메모리를 참조하는 방식.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+![indirect-mode](/computer-architecture/image/4-computer-architecture/indirect-mode.png)
