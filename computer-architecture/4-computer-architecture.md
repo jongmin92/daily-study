@@ -89,9 +89,28 @@ STORE  r3,  0x30        // r3에 저장된 값을 0x30번지에 저장
     - ex) LOAD 명령어의 메인 메모리의 주소 값을 나태니는 source가 0x0000~0x00ff 까지 밖에 표현하지 못함.
 - 기존의 방식으로 메모리의 모든 영역에 대한 접근이 불가능하다.
 - 이를 해결하기 위해 Indirect Addressing Mode가 등장함.
+> 포인터가 필요한 이유와 관련있다고 생각한다. 포인터는 결국 "메모리의 주소"를 저장하기 위한 메모리 공간일 뿐이다.
 
 
 - **Direct Addressing Mode**: 명령어에서 지정하는 위치의 메모리를 참조하는 방식.
 - **Indirect Addressing Mode**: 명령어에서 지정하는 위치에 저장된 값을 주소값으로 하여 메모리를 참조하는 방식.
 
 ![indirect-mode](/computer-architecture/image/4-computer-architecture/indirect-mode.png)
+![indirect-mode-bit](/computer-architecture/image/4-computer-architecture/indirect-mode-bit.png)
+
+## Indirect 모드 활용 예제
+![indirect-mode-ex](/computer-architecture/image/4-computer-architecture/indirect-modeex.png)
+```
+LOAD  r1,  0x0010         // r1=10 (a)
+
+MUL  r0,  4,  4                 // r0=16
+MUL  r2,  4,  4                 // r2=16
+MUL  r3,  r0,  r2              // r3=256(=0x100)
+
+STORE  r3,  0x0030
+LOAD  r2,  [0x0030]      // r2=20 (b)
+
+ADD  r3,  r1,  r2             // r3=30 (a+b)
+STORE  r2,  0x0020
+```
+
