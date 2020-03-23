@@ -90,6 +90,7 @@ STORE  r3,  0x30        // r3에 저장된 값을 0x30번지에 저장
 - 기존의 방식으로 메모리의 모든 영역에 대한 접근이 불가능하다.
 - 이를 해결하기 위해 Indirect Addressing Mode가 등장함.
 
+
 - **Direct Addressing Mode**: 명령어에서 지정하는 위치의 메모리를 참조하는 방식.
 - **Indirect Addressing Mode**: 명령어에서 지정하는 위치에 저장된 값을 주소값으로 하여 메모리를 참조하는 방식.
 
