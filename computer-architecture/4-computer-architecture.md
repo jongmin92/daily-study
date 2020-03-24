@@ -99,7 +99,7 @@ STORE  r3,  0x30        // r3에 저장된 값을 0x30번지에 저장
 ![indirect-mode-bit](/computer-architecture/image/4-computer-architecture/indirect-mode-bit.png)
 
 ## Indirect 모드 활용 예제
-![indirect-mode-ex](/computer-architecture/image/4-computer-architecture/indirect-modeex.png)
+![indirect-mode-ex](/computer-architecture/image/4-computer-architecture/indirect-mode-ex.png)
 ```
 LOAD  r1,  0x0010         // r1=10 (a)
 
