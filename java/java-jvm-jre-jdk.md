@@ -33,6 +33,9 @@
 - 최초의 JVM은 자바만을 지원하기 위해 만들어졌다. 하지만 자바에 대한 의존성이 타이트하지 않다. 어떠한 다른 프로그래밍 언어로 코딩하더라도 그 언어를 컴파일했을 때, class 파일이 만들어진다거나 java파일이 만들어지면 JVM을 사용할 수 있다.
 - 클로저, 그루비, JRuby, Jython, Kotlin, Scala, ...
     - https://en.wikipedia.org/wiki/List_of_JVM_languages
+    > Kotlin  
+    $ kotlinc Hello.kt -include-runtime -d hello.jar  
+    $ java -jar hello.jar
 
 >참고
 >- https://howtodoinjava.com/java/basics/jdk-jre-jvm/ 
