@@ -13,7 +13,7 @@ Class<T>의 객체는 JVM 기동시, 클래스 로더에 의해 클래스가 로
 ## Class<T>에 접근하는 방법
 - `타입.class`를 사용
 - `인스턴스.getClass()`를 사용
-- `Class.forName("FQCN)`를 사용
+- `Class.forName("FQCN")`를 사용
     - ClassPath에 해당 클래스가 없다면 ClassNotFoundException이 발생한다.
 
 ## Class<T>를 통해 할 수 있는 것
