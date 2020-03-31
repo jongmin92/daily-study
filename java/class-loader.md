@@ -47,4 +47,6 @@ null
 
 Bootstrap 클래스 로더는 네이티브 코드로 구현되어 있는 클래스 로더라서 VM마다 다 다르고, 자바 코드에서 참조해 출력할 수 없다.
 
+![order](/java/image/class-loader/classloader-order.jpg)
+
 모든 부모 클래스 로더에게 요청하고 못 읽으면 본인이 읽기를 시도한다. 본인도 못읽으면 `ClassNotFoundException`이 발생한다.
