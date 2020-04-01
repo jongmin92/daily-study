@@ -35,8 +35,3 @@ Java 1.3 버전부터 이런 단점을 보완한 [다이나믹 프록시](https:
 
 # CGlib
 클래스에 대해서 프록시를 생성하고 싶다면 [CGlib](https://github.com/cglib/cglib) 라이브러리를 사용해 생성할 수 있다. Spring과 Hibernate에서 사용하고 있다.
-
-
-
-
-
