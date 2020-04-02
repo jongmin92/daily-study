@@ -3,6 +3,8 @@
 **애노테이션 프로세싱은 컴파일 타임에 애노테이션들을 스캐닝하고 처리하는 javac에 속한 빌드툴이다.** 특정 애노테이션들을 위해 애노테이션 프로세서를 만들어서 등록할 수 있다.
 애노테이션 프로세싱은 자바 1.6부터 사용 가능하다.
 
+>대표적인 사용 예로, lombok이 있다. 컴파일 시점에 애노테이션 프로세서를 사용하여 소스코드의 [ATS(Abstract Syntax Tree)](https://javaparser.org/inspecting-an-ast/)를 조작한다.  
+
 [Processor](https://docs.oracle.com/javase/8/docs/api/javax/annotation/processing/Processor.html) 인터페이스를 직접 구현해도 되지만, 기본으로 제공되는 [AbstractProcessor](https://docs.oracle.com/javase/8/docs/api/javax/annotation/processing/AbstractProcessor.html) 추상 클래스를 사용하자.
 
 ## 주요 메서드
@@ -17,20 +19,14 @@
 
 ## JAR 패키징
 - JAR 패키징을 위해서는 MANIFEST 정보를 생성해야한다.
-- src/main/resource/services 하위에 javax.annotation.processing.Processor 파일을 생성한다.
+- src/main/resource/META-INF/services 하위에 javax.annotation.processing.Processor 파일을 생성한다.
 - 생성한 프로세서의 풀 패키지 경로를 적는다.
 
->AutoService  
+>**AutoService**  
 >AutoService를 사용하면 자동적으로 MANIFEST 파일을 생성해준다.
 >컴파일 시점에 애노테이션 프로세서를 사용하여 META-INF/services/javax.annotation.processor.Processor 파일을 자동으로 생성한다.
+>cc. [ServiceProvider](https://itnext.io/java-service-provider-interface-understanding-it-via-code-30e1dd45a091)
 
-
-
-
-
-
-
-
-
-
-
+- 참고
+    - https://medium.com/@jason_kim/annotation-processing-101-%EB%B2%88%EC%97%AD-be333c7b913
+    - https://pluu.github.io/blog/android/2015/12/24/annotation-processing-api/
