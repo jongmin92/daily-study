@@ -7,7 +7,7 @@
 ## Getting started
 ```kotlin
 plugins {
-	id("org.springframework.boot") version "2.2.6.RELEASE"
+    id("org.springframework.boot") version "2.2.6.RELEASE"
     java
 }
 ```
@@ -55,9 +55,9 @@ plugins {
 
 ```kotlin
 the<DependencyManagementExtension>().apply {
-	imports {
-		mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-	}
+    imports {
+        mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+    }
 }
 ```
 
@@ -65,9 +65,9 @@ the<DependencyManagementExtension>().apply {
 
 ```kotlin
 dependencyManagement {
-	imports {
-		mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-	}
+    imports {
+        mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+    }
 }
 ``` 
 
@@ -86,8 +86,8 @@ dependencyManagement {
 
 ```kotlin
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }
 ```
 
@@ -101,7 +101,7 @@ dependencies {
 
 ```kotlin
 tasks.getByName<Jar>("jar") {
-	enabled = true
+    enabled = true
 }
 ```
 
@@ -115,7 +115,7 @@ tasks.getByName<Jar>("jar") {
 
 ```kotlin
 tasks.getByName<BootJar>("bootJar") {
-	mainClassName = "com.example.ExampleApplication"
+    mainClassName = "com.example.ExampleApplication"
 }
 ```
 
@@ -123,7 +123,7 @@ tasks.getByName<BootJar>("bootJar") {
 
 ```kotlin
 springBoot {
-	mainClassName = "com.example.ExampleApplication"
+    mainClassName = "com.example.ExampleApplication"
 }
 ```
 
@@ -132,7 +132,7 @@ springBoot {
 
 ```kotlin
 tasks.getByName<BootJar>("bootJar") {
-	launchScript()
+    launchScript()
 }
 ```
 
@@ -140,9 +140,9 @@ tasks.getByName<BootJar>("bootJar") {
 
 ```kotlin
 tasks.getByName<BootJar>("bootJar") {
-	launchScript {
-		properties(mapOf("logFilename" to "example-app.log"))
-	}
+    launchScript {
+        properties(mapOf("logFilename" to "example-app.log"))
+    }
 }
 ```
 
@@ -150,9 +150,9 @@ tasks.getByName<BootJar>("bootJar") {
 
 ```kotlin
 tasks.getByName<BootJar>("bootJar") {
-	launchScript {
-		script = file("src/custom.script")
-	}
+    launchScript {
+        script = file("src/custom.script")
+    }
 }
 ```
 
@@ -163,11 +163,11 @@ tasks.getByName<BootJar>("bootJar") {
 
 ```kotlin
 tasks.getByName<Upload>("uploadBootArchives") {
-	repositories.withGroovyBuilder {
-		"mavenDeployer" {
-			"repository"("url" to "https://repo.example.com")
-		}
-	}
+    repositories.withGroovyBuilder {
+        "mavenDeployer" {
+            "repository"("url" to "https://repo.example.com")
+        }
+    }
 }
 ```
 
@@ -176,16 +176,16 @@ tasks.getByName<Upload>("uploadBootArchives") {
 
 ```kotlin
 publishing {
-	publications {
-		create<MavenPublication>("bootJava") {
-			artifact(tasks.getByName("bootJar"))
-		}
-	}
-	repositories {
-		maven {
-			url = uri("https://repo.example.com")
-		}
-	}
+    publications {
+        create<MavenPublication>("bootJava") {
+            artifact(tasks.getByName("bootJar"))
+        }
+    }
+    repositories {
+        maven {
+            url = uri("https://repo.example.com")
+        }
+    }
 }
 ```
 
@@ -204,7 +204,7 @@ main 클래스를 명시적으로 설정할 수도 있다.
 
 ```kotlin
 tasks.getByName<BootRun>("bootRun") {
-	main = "com.example.ExampleApplication"
+    main = "com.example.ExampleApplication"
 }
 ```
 
@@ -212,7 +212,7 @@ tasks.getByName<BootRun>("bootRun") {
 
 ```kotlin
 springBoot {
-	mainClassName = "com.example.ExampleApplication"
+    mainClassName = "com.example.ExampleApplication"
 }
 ```
 
@@ -230,7 +230,7 @@ $ ./gradlew bootRun --args='--spring.profiles.active=dev'
 
 ```
 springBoot {
-	buildInfo()
+    buildInfo()
 }
 ```
 
@@ -250,14 +250,14 @@ springBoot {
 
 ```kotlin
 springBoot {
-	buildInfo {
-		properties {
-			artifact = "example-app"
-			version = "1.2.3"
-			group = "com.example"
-			name = "Example application"
-		}
-	}
+    buildInfo {
+        properties {
+            artifact = "example-app"
+            version = "1.2.3"
+            group = "com.example"
+            name = "Example application"
+        }
+    }
 }
 ```
 
@@ -268,14 +268,14 @@ springBoot {
 
 ```kotlin
 springBoot {
-	buildInfo {
-		properties {
-			additional = mapOf(
-				"a" to "alpha",
-				"b" to "bravo"
-			)
-		}
-	}
+    buildInfo {
+        properties {
+            additional = mapOf(
+                "a" to "alpha",
+                "b" to "bravo"
+            )
+        }
+    }
 }
 ```
 
