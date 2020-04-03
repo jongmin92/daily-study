@@ -1,5 +1,7 @@
 # Spring Boot Gradle Plugin
 
+> document: https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/
+
 스프링 부트 그레이들 플러그인은 그레이들에서 스프링 부트 지원을 제공한다. executable jar 혹은 war를 패키징하고 스프링 부트 애플리케이션을 실행하며 의존성 관리(dependency management)를 제공한다. 그레이들 5.x 이상의 버전이 필요하다.
 
 ## Getting started
@@ -232,7 +234,7 @@ springBoot {
 }
 ```
 
-`bootBuildInfo` 라는 `BuildInfo` 태스크가 구성되고 Java 플러그인의 `classes` 태스크가 의존하게 된다. output directory는 main source 셋 directory인 `build/resources/main/META-INF`가 된다.
+`bootBuildInfo` 라는 `BuildInfo` 태스크가 구성되고 Java 플러그인의 `classes` 태스크가 의존하게 된다. output directory는 main source set directory인 `build/resources/main/META-INF`가 된다.
 
 기본적으로 생성된 빌드 정보는 프로젝트로부터 전달된다.
 
@@ -278,17 +280,32 @@ springBoot {
 ```
 
 ## Reacting to other plugins
+다른 플러그인이 적용되면 스프링 부트 플러그인은 프로젝트의 설정을 다양하게 변경한다.
 
+### Reacting to the Java plugin
+그레이들의 [Java 플러그인](https://docs.gradle.org/current/userguide/java_plugin.html)이 적용되면 스프링 부트 플러그인의 변경은 다음과 같다.
 
+1. 실행 가능한 fat jar를 생성하는 `bootJar`라는 `BootJar` 태스크를 생성한다. jar는 main source set의 런타임 클래스 패스에 있는 모든것을 포함한다. main source set의 클래스는 `BOOT-INF/classes`로 패키지되고, jar는 `BOOT-INF/lib`로 패키지된다.
+2. `assemble` 태스크가 `bootJar` 태스크에 의존성을 갖도록 설정된다.
+3. `jar` 태스크를 disable 한다.
+4. 애플리케이션을 실행하는데 사용할 수 있는 `bootRun`이라는 `BootRun` 태스크를 생성한다.
+5. `bootJar` 태스크에 의해서 생성된 아티팩트를 포함하는 `bootArchives` 설정을 생성한다.
+6. `UTF-8`을 사용하도록 `JavaCompile` 태스크를 설정한다.
+7. `-parameters` 컴파일러 인자(argument)를 사용하도록 태스크를 설정한다.
 
+### Reacting to the Kotlin plugin
+그레이들의 [Kotlin 플러그인](https://kotlinlang.org/docs/reference/using-gradle.html)이 적용되면 스프링 부트 플러그인의 변경은 다음과 같다.
 
+1. 스프링 부트 의존성 관리에 사용된 Kotlin 버전을 플러그인의 버전과 일치시킨다. `kotlin.version` 프로퍼티의 값을 Kotlin plugin 버전과 일치하는 값으로 설정하면 된다. 
+2. `-java-parameters` 컴파일러 인자(argument)를 사용하도록 `KotlinCompile` 태스크를 설정한다.
 
+### Reacting to the war plugin
+그레이들의 [War 플러그인](https://docs.gradle.org/current/userguide/war_plugin.html)이 적용되면 스프링 부트 플러그인의 변경은 다음과 같다.
 
+1. 실행가능한 fat war를 생성하는 `BootWar` 태스크를 생성한다. `providedRuntime` 설정의 디펜던시는 `WEB-INF/lib-provided`로 패키징된다.
+2. `assemble` 태스크가 `bootWar` 태스크에 의존하도록 설정한다.
+3. `war` 태스크를 disable 한다.
+4. `bootWar` 태스크에서 생성된 아티팩트를 포함하도록 `bootArchives` 설정을 구성한다.
 
-
-
-
-
-
-
-
+### Reacting to the dependency management plugin
+[io.spring.dependency-management 플러그인](https://github.com/spring-gradle-plugins/dependency-management-plugin)이 적용되면, 스프링 부트 플러그인은 자동으로 `spring-boot-dependencies` bom을 import 한다.
