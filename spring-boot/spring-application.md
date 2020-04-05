@@ -30,15 +30,18 @@ org.springframework.context.ApplicationListener=com.example.project.MyListener
 7. `ApplicationReadyEvent`는 application과 command-line runner가 실행된 후 발생한다. 애플리케이션이 요청을 처리할 준비가 되었음을 의미한다.
 8. `ApplicationFailedEvent`는 startup 과정에서 exception이 발생하는 경우 발생한다.
 
+## Web Environment
+`SpringApplication`은 사용자를 대신해서 올바른 유형의 `ApplicationContext`를 생성하려고 시도한다. `WebApplicationType`을 결정하는데 사용하는 알고리즘은 매우 단순하다.
+- Spring MVC가 존재하면, `AnnotationConfigServletWebServerApplicationContext`가 사용된다.
+- Spring MVC가 존재하지 않고, Spring WebFlux가 존재하면, `AnnotationConfigReactiveWebServerApplicationContext`가 사용된다.
+- 그렇지 않으면, `AnnotationConfigApplicationContext`가 사용된다.
 
+`setApplicationContextClass()`를 호출해서 ApplicationContext type을 완전히 제어할 수도 있다.
 
+## Accessing Application Arguments
+`SpringApplication.run()`에 전달된 인자(arguments)를 사용해야하는 경우, `org.springframework.boot.ApplicationArguments` 빈을 주입 받아서 사용할 수 있다.
 
+## Using the ApplicationRunner or CommandLineRunner
+`SpringApplication`이 시작된 후 특정 코드를 실행해야하는 경우 `ApplicationRunner` 혹은 `CommandLineRunner` 인터페이스를 구현하면 된다.
 
-
-
-
-
-
-
-
-
+특정 순서로 호출해야하는 여러 ApplicationRunner 혹은 CommandLineRunner를 정의해야 한다면, `org.springframework.core.Ordered` 인터페이스를 추가로 구현하거나 `org.springframework.core.Order` 애노테이션을 사용할 수 있다. 
