@@ -45,13 +45,15 @@ configuration을 특정 순서로 적용해야 하는 경우 `@AutoConfigureAfte
 `@ConditionalOnExpression` 애노테이션은 SpEL 표현식의 결과를 기반으로 configuration을 포함할 수 있다.
 
 ## Testing your Auto-configuration
-`ApplicationContextRunner`는 base, common configuration을 모으기 위해 테스트 클래스의 필드로 정의된다.
+`ApplicationContextRunner`는 `ApplicationContext`를 실행하고 AssertJ 스타일의 assertion을 제공하는 유틸리티 클래스이다. 테스트 클래스의 필드로 정의되어 각 테스트에서 정의되어 사용된다.
+
+ApplicationContextRunner는 각 테스트에 대해 ApplicationContext를 사용자 정의할 수 있는 `withUserConfiguration` 메서드를 제공한다.
 ```java
 private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
     .withConfiguration(AutoConfigurations.of(UserServiceAutoConfiguration.class));
 ```
 
-각 테스트는 runner를 사용해서 특정 use case를 나타낼 수 있다.
+각 테스트는 runner를 사용해서 특정 use case를 나타낼 수 있다. `run` 메서드는 컨텍스트에 assertion을 적용하는 매개 변수로 ContextConsumer를 사용한다. 테스트가 종료되면 ApplicationContext는 자동으로 닫힌다.
 ```java
 @Test
 void defaultServiceBacksOff() {
@@ -71,6 +73,8 @@ static class UserConfiguration {
 
 }
 ```
+
+특정 클래스가 클래스 패스에 없는 경우를 테스트 하고 싶은 경우 `FilteredClassLoader`를 사용한다. 런타임 시점에 클래스 패스에서 특정 클래스를 필러팅하는데 사용한다.
 
 ### Overriding the Classpath
 런타임에 특정 클래스 및 패키지가 없을 때 발생하는 상황을 테스트할 수도 있다. 스프링 부트든 러너가 쉽게 사용할 수 있는 `FilteredClassLoader`를 제공한다.
