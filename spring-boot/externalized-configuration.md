@@ -140,3 +140,69 @@ spring:
 > profile 별 YAML 파일과 다중 YAML 문서 구문을 함께 사용하는 것은 좋지 않다. 
 
 ## Type-safe Configuration Properties
+`@Value("${property}")` 애노테이션을 사용하여 configuration properties를 주입하는 것은 때때로는 번거로울 수 있다. 특히 여러 properties를 사용하거나 데이터가 계층적인 구조를 갖고 있는 경우 더욱 그렇다. 스프링 부트는 더욱 효율적으로 configuration
+ properties를 관리할 수 있는 방법을 제공한다.
+
+### JavaBean properties binding
+다음과 같이 표준 JavaBean properties를 선언하는 Bean을 바인딩 할 수 있다.
+
+```java
+package com.example;
+
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties("acme")
+public class AcmeProperties {
+
+    private boolean enabled;
+
+    private InetAddress remoteAddress;
+
+    private final Security security = new Security();
+
+    public boolean isEnabled() { ... }
+
+    public void setEnabled(boolean enabled) { ... }
+
+    public InetAddress getRemoteAddress() { ... }
+
+    public void setRemoteAddress(InetAddress remoteAddress) { ... }
+
+    public Security getSecurity() { ... }
+
+    public static class Security {
+
+        private String username;
+
+        private String password;
+
+        private List<String> roles = new ArrayList<>(Collections.singleton("USER"));
+
+        public String getUsername() { ... }
+
+        public void setUsername(String username) { ... }
+
+        public String getPassword() { ... }
+
+        public void setPassword(String password) { ... }
+
+        public List<String> getRoles() { ... }
+
+        public void setRoles(List<String> roles) { ... }
+
+    }
+}
+```
+
+표준 JavaBean을 통해 바인딩하기 때문에 default empty constructor, setter, getter는 일반적으로 필수이다. 그러나 다음과 같은 경우 setter를 생략할 수 있다.
+- Map이 초기화 되는 한, getter는 필요하지만, setter는 반드시 필요하지 않다.
+- Collection과 Array는 index(YAML) 혹은 single comma(properties)로 구분 된 값을 통해 접근할 수 있다. 후자의 경우 setter가 필수 이다.
+- 중첩된(nested) POJO가 초기화되면 setter가 필요하지 않다.
+- 표준 JavaBean properties만 고려되며, static properties에 대한 바인딩은 지원하지 않는다.
+
+### Constructor binding
