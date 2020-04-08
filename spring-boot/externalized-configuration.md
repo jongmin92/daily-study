@@ -206,3 +206,146 @@ public class AcmeProperties {
 - 표준 JavaBean properties만 고려되며, static properties에 대한 바인딩은 지원하지 않는다.
 
 ### Constructor binding
+이전의 예제는 다음과 같이 변경 불가능한 방식(immutable)으로 다시 작성할 수 있다.
+```java
+package com.example;
+
+import java.net.InetAddress;
+import java.util.List;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+
+@ConstructorBinding
+@ConfigurationProperties("acme")
+public class AcmeProperties {
+
+    private final boolean enabled;
+
+    private final InetAddress remoteAddress;
+
+    private final Security security;
+
+    public AcmeProperties(boolean enabled, InetAddress remoteAddress, Security security) {
+        this.enabled = enabled;
+        this.remoteAddress = remoteAddress;
+        this.security = security;
+    }
+
+    public boolean isEnabled() { ... }
+
+    public InetAddress getRemoteAddress() { ... }
+
+    public Security getSecurity() { ... }
+
+    public static class Security {
+
+        private final String username;
+
+        private final String password;
+
+        private final List<String> roles;
+
+        public Security(String username, String password,
+                @DefaultValue("USER") List<String> roles) {
+            this.username = username;
+            this.password = password;
+            this.roles = roles;
+        }
+
+        public String getUsername() { ... }
+
+        public String getPassword() { ... }
+
+        public List<String> getRoles() { ... }
+
+    }
+
+}
+```
+
+이 설정에서 `@ConstructorBinding` 애노테이션은 생성자 바인딩을 사용해야 함을 나타내는 데 사용된다. 바인더는 바인딩하려는 매개 변수가 있는 생성자를 찾을 것이다.
+
+`@ConstructorBinding` 클래스의 중첩 멤버도 생성자를 통해 바인딩된다. `@DefaultValue`를 사용해서 기본 값을 지정할 수 있다.
+
+> 생성자 바인딩을 사용하려면 `@EnableConfigurationProperties` 또는 configuration property scanning을 사용해야 한다. 일반 스프링 메커니즘에 의해 생성된 Bean(@Component, @Bean method, @Import)에는 생성자 바인딩을 사용할 수 없다.
+>
+> 클래스에 대한 생성자가 둘 이상인 경우 바인딩해야하는 생성자에 `@ConstructorBinding`을 직접 사용할 수 있다.
+
+### Enabling `@ConfigurationProperties`-annotated types
+스프링 부트는 `@ConfigurationProperties` 타입을 바인딩하고 Bean으로 등록하기위한 수단을 제공한다. 클래스별로 configuration properties를 활성화 하거나 component scanning과 비슷한 방식으로 scanning 방식을 활성화 할 수 있다.
+
+경우에 따라 `@ConfigurationProperties` 애노테이션이 달린 클래스는 auto-configuration 혹은 conditional로 제공하려는 경우 scanning 방식이 적합하지 않을 수 있다. 이 경우, `EnableConfigurationProperties` 애노테이션을 사용해서 처리 할 타입을 지정할 수 있다.
+
+```java
+@Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties(AcmeProperties.class)
+public class MyConfiguration {
+}
+```
+
+configuration property scanning 방식을 사용하려면 `@ConfigurationPropertiesScan` 애노테이션을 애플리케이션에 추가한다. 일반적으로 `@SpringBootApplication` 애노테이션이 달린 main application
+ 클래스에 추가하지만, `@Configuration` 클래스에도 추가 할 수 있다. 기본적으로 애노테이션을 선언하는 클래스 패키지에서 scan이 일어나지만 특정 패키지를 지정할 수도 있다. 
+
+```java
+@SpringBootApplication
+@ConfigurationPropertiesScan({ "com.example.app", "org.acme.another" })
+public class MyApplication {
+}
+```
+
+### Relaxed Binding
+스프링 부트는 `Environment` properties를 `@ConfigurationProperties` bean에 바인딩하기 위해 다소 완화된 규칙을 사용한다. 따라서 `Environment` property 이름과 bean property 이름이 정확히 일치할 필요는 없다.
+
+```java
+@ConfigurationProperties(prefix="acme.my-project.person")
+public class OwnerProperties {
+
+    private String firstName;
+
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+}
+```
+
+위의 코드를 사용하면 다음의 property 이름을 모두 사용할 수 있다.
+
+| Property | Note |
+| -------- | ---- |
+| acme.my-project.person.first-name | `.properties`와 `.yml` 파일에 권장되는 Kebab case 형식 |
+| acme.myProject.person.firstName | 표준 camel case 형식 |
+| acme.my_project.person.first_name | underscore case 형식 |
+| ACME_MYPROJECT_PERSON_FIRSTNAME | 시스템 환경 변수를 사용할 때 권장되는 Upper case 형식 |
+
+**property source 마다의 relaxed 바인딩 규칙**은 다음과 같다.
+
+| Property Source | Simple | List |
+| --------------- | ------ | ---- |
+| Properties Files | Kebab case, Camel case, underscore case | `[]` 또는 `,`로 구분 된 값을 사용 |
+| YAML Files | Kebab case, Camel case, underscore case | 표준 YAML list 문법 또는 `,`로 구분 된 값을 사용 |
+| Environment Variables | underscoe를 구분자로 사용하는 Upper case | MY_ACME_1_OTHER = my.acme\[1].other와 같이 underscore로 둘러싸인 숫자 값 |
+| System properties | Kebab case, Camel case, underscore case | `[]` 또는 `,`로 구분 된 값을 사용 |
+
+> 공식 문서에서는 가능한 경우 lower-case kebab 형식을 권장한다. (ex. my.property-name=acme))
+
+`Map` property에 바인딩 할 때는 키에 lowercase alpha-numeric 문자 또는 `-`의 경우, 원래 값이 유지되도록 대괄호 표기법을 사용해야 한다.
+
+```yaml
+acme:
+  map:
+    "[/key1]": value1
+    "[/key2]": value2
+    /key3: value3
+```
+
+위의 property는 `/key1`, `/key2`, `/key3`를 `Map`의 키로 사용해서 바인딩된다.
+
+> YAML 파일의 경우 키를 올바르게 구문 분석하려면 괄호를 `"`로 묶어야 한다.
+
+### Converting durations
