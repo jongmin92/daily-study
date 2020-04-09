@@ -349,3 +349,74 @@ acme:
 > YAML 파일의 경우 키를 올바르게 구문 분석하려면 괄호를 `"`로 묶어야 한다.
 
 ### Converting durations
+스프링 부트는 `java.time.Duration` property를 지원한다. 
+
+- `@DurationUnit`을 지정하지 않은 경우 기본 단위로 milliseconds를 사용
+- [java.time.Duration](https://docs.oracle.com/javase/8/docs/api//java/time/Duration.html#parse-java.lang.CharSequence-) 에서 사용하는 표준 ISO-8601 형식
+- 값과 단위가 결합된 보다 읽기 쉬운 형식 (ex. 10s)
+
+```java
+@ConfigurationProperties("app.system")
+public class AppSystemProperties {
+
+    @DurationUnit(ChronoUnit.SECONDS)
+    private Duration sessionTimeout = Duration.ofSeconds(30);
+
+    // ... getters and setters
+}
+```
+
+위의 예제 코드에서 30 seconds은 30, PT30S, 30s 로 표현 가능하다.
+기본 단위는 milliseconds 이며 `@DurationUnit`을 사용해서 재정의 할 수 있다.
+
+### @ConfigurationProperties Validation
+스프링 부트는 `@Validated` 애노테이션이 달릴 때마다 `@ConfigurationProperties` 클래스의 유효성을 검사한다. Configuration 클래스에서 `JSR-303` `javax.validation` constraint 애노테이션을 직접 사용할 수 있다.
+
+```java
+@ConfigurationProperties(prefix="acme")
+@Validated
+public class AcmeProperties {
+
+    @NotNull
+    private InetAddress remoteAddress;
+
+    // ... getters and setters
+}
+```
+
+중첩(nested) property에 대해서도 유효성 검사를 하기 위해서는 해당 필드에 `@Valid` 애노테이션을 적용해야한다.
+
+```java
+@ConfigurationProperties(prefix="acme")
+@Validated
+public class AcmeProperties {
+
+    @NotNull
+    private InetAddress remoteAddress;
+
+    @Valid
+    private final Security security = new Security();
+
+    // ... getters and setters
+
+    public static class Security {
+
+        @NotEmpty
+        public String username;
+
+        // ... getters and setters
+    }
+}
+```
+
+`configurationPropertiesValidator` 라는 Bean을 작성해서 custom한 스프링 `Validator`를 추가 할 수도 있다. `@Bean` 메서드는 `static`으로 선언되어야 한다. configuration properties validator
+는 애플리케이션의 라이프사이클 초기에 생성되며, `@Bean` 메서드를 정적으로 선언하면 `@Configuration` 클래스를 인스턴스화하지 않고도 Bean을 만들 수 있다. 
+
+### @ConfigurationProperties vs. @Value
+| Feature | @ConfigurationProperties | @Value |
+| ------- | ------------------------ | ------ |
+| Relaxed binding | Yes | No |
+| Meta-data support | Yes | No |
+| `SpEL` evaluation | No | Yes |
+
+스프링 부트 공식 문서에서는 직접 작성한 component에 대한 configuration key를 정의해야 하는 경우 `@ConfigurationProperties` 애노테이션이 달린 POJO로 만들 것을 권장한다. `@Value`는 relaxed binding을 지원하지 않기 때문에 환경 변수를 값을 사용해야하는 경우에는 적합하지 않다.
