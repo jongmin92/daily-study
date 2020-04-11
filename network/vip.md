@@ -5,6 +5,6 @@
 
 해결 방법으로는 DNS 요청의 응답으로 로드밸런서(스위치)의 IP(Virtual IP)를 알려주는 것이다. 그 후 클라이언트로부터 로드밸런서로 요청이 들어오면 로드밸런서는 자신이 알고 있는 웹 서버들에게 요청을 전달한다.
 
-![vip](/network/image/vip/vip.p ng)
+![vip](/network/image/vip/vip.png)
 
 VIP는 이 IP 자체가 가상적인 것은 아니다. Public IP일 수도 있고 Private IP일 수도 있다. (만약 Private IP라면 라우터에서 NAT 기능을 수행해 주고 있을 것이다.) 결국 VIP는 `실제 요청을 처리하는 서버의 IP가 아니면서 마치 서버 IP인 것처럼 사용`되기 때문에 Virtual IP라고 부르는 것이다.
