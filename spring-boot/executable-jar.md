@@ -11,3 +11,58 @@
 의 문제는 실제 애플리케이션에 어떤 라이브러리가 포함되어 있는지 확인하기 어렵다는 것이다.** 또한 여러 jar에서 동일한 파일 이름을 사용하지만 내용이 다른 경우에도 문제가 될 수 있다. 스프링 부트는 다른 접근 방식을 이용해 jar를 중첩(nest)해서 사용한다.
 
 ### The Executable Jar File Structure
+스프링 부트 Loader와 호환되는 jar 파일은 다음과 같은 구조로 만들어져야 한다.
+
+```
+example.jar
+ |
+ +-META-INF
+ |  +-MANIFEST.MF
+ +-org
+ |  +-springframework
+ |     +-boot
+ |        +-loader
+ |           +-<spring boot loader classes>
+ +-BOOT-INF
+    +-classes
+    |  +-mycompany
+    |     +-project
+    |        +-YourClasses.class
+    +-lib
+       +-dependency1.jar
+       +-dependency2.jar
+```
+
+애플리케이션 클래스는 중첩된 `BOOT-INF/classes` 디렉토리에 있어야 한다. 라이브러리는 중첩된 `BOOT-INF/lib` 디렉토리에 있어야 한다.
+
+### The Executable War File Structure
+스프링 부트 Loader와 호환되는 war 파일은 다음과 같은 구조로 만들어져야 한다.
+
+
+```
+example.war
+ |
+ +-META-INF
+ |  +-MANIFEST.MF
+ +-org
+ |  +-springframework
+ |     +-boot
+ |        +-loader
+ |           +-<spring boot loader classes>
+ +-WEB-INF
+    +-classes
+    |  +-com
+    |     +-mycompany
+    |        +-project
+    |           +-YourClasses.class
+    +-lib
+    |  +-dependency1.jar
+    |  +-dependency2.jar
+    +-lib-provided
+       +-servlet-api.jar
+       +-dependency3.jar
+```
+
+라이브러리는 중첩된 `WEB-INF/lib` 디렉토리에 있어야 한다. embedded로 실행할 때는 필요하지만 기존 웹 컨테이너에 배포할 때는 필요하지 않은 라이브러리는 모두 `WEB-INF/lib-provided` 디렉토리에 있어야 한다.
+
+## Spring Boot’s “JarFile” Class
