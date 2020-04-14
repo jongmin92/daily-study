@@ -86,3 +86,31 @@ myapp.jar
 
 ### Compatibility with the Standard Java “JarFile”
 스프링 부트 Loader는 기존 코드 및 라이브러리와의 호환성을 유지한다. `org.springframework.boot.loader.jar.JarFile`은 `java.util.jar.JarFile`을 확장하고 있으며 대체 가능하다. `getURL()` 메서드는 `java.net.JarURLConnection`과 호환되는 connection을 제공하며 Java의 `URLClassLoader`와 함께 사용할 수 있는 URL을 리턴한다.
+
+## Launching Executable Jars
+`org.springframework.boot.loader.Launcher` 클래스는 실행 가능한 jar의 main entry point로 사용되는 특별한 bootstrap 클래스이다. jar 파일의 실제 Main 클래스이며 적절한 `URLClassLoader`를 설정하고 궁극적으로 `main()` 메서드를 호출하는데 사용된다.
+
+3가지의 launcher sub 클래스가 있다. (JarLauncher, WarLauncher, PropertiesLauncher)
+
+## Launcher Manifest
+`META-INF/MANIFEST.MF`의 `Main-Class` 속성으로 적절한 `Launcher`를 지정해야 한다. main 메서드를 포함하고 있는 클래스는 `Start-Class` 속성으로 지정되어야 한다.
+
+다음은 실행 가능한 jar 파일에 대한 일반적인 `MANIFEST.MF`의 예제이다.
+
+```
+Main-Class: org.springframework.boot.loader.JarLauncher
+Start-Class: com.mycompany.project.MyApplication
+```
+
+war 파일의 경우는 다음과 같다.
+
+```
+Main-Class: org.springframework.boot.loader.WarLauncher
+Start-Class: com.mycompany.project.MyApplication
+```
+
+> manifest 파일에서 `Class-Path`를 지정할 필요는 없다. classpath는 중첩된 jar에서 추론된다.
+
+## Executable Jar Restrictions
+스프링 부트 Loader 패키지 애플리케이션으로 작업할 때 다음 제한 사항을 고려해야한다.
+- System classLoader: 시작된 애플리케이션은 클래스를 로드할 때 `Thread.getContextClassLoader()`를 사용해야 한다. (대부분의 라이브러리 및 프레임워크에 해당한다.) `ClassLoader.getSystemClassLoader()`를 사용해서 중첩된 jar 클래스를 로드하려고하면 실패한다. `java.util.Logging`은 항상 system classloader를 사용한다. 이런 이유로 다른 로깅 구현을 고려해야한다.
