@@ -50,3 +50,38 @@
     - 인증 기관이 폐지한 인증서 목록
     - 폐지된 인증서의 일련 번호의 목록에 대해 인증 기관이 디지털 서명을 붙인 것
         - 인증서의 일련 번호: 인증기관이 발행한 인증서에 붙여진 순서 번호
+
+# X.509 인증서
+
+## 정의
+인증서는 인증 기관에서 발행하고, 이용자가 그것을 검증하는 것이 되기 때문에 인증서의 형식이 서로 다르면 매우 불편하다.
+
+이를 해결하기 위해서 인증서의 표준 규격을 정하고 사용한다.
+
+X.509는 인증서의 표준 규격이다.
+
+## 구성 요소
+- Version : 인증서의 버전
+- Serial Number : CA가 할당한 정수로 된 고유 번호
+- **Signature** : 서명 알고리즘 식별자
+- **Issuer** : 발행자 (CA의 이름)
+- Validity : 유효기간
+- **Subject** : 소유자 (주로 사이트 소유자의 도메인 혹은 하위 CA 이름)
+- Subject Public Key Info : 소유자 공개키 정보
+    - Public Key Algorithm : 공개키 알고리즘의 종류
+    - Subject Public Key : 공개키
+- **Extensions** : 확장 필드
+- Certificate Signature Algorithm : 디지털 서명의 알고리즘 종류
+- Certificate Signature : 디지털 서명 값
+
+![x-509](/encryption/image/certificate/x-509.png)
+
+## 인증서 파일 확장자
+X.509 표준의 인증서 형식은 ASN.1 (Abstract Syntax Notation One) 이라는 명명 규칙을 따른다. X.509 인증서의 각 구성 요소는 ASN.1 형식에 맞게 저장된다.
+
+ASN.1 형식으로 되어 있는 X.509 인증서의 내용을 파일로 저장할 때 주로 두 가지 종류의 형식으로 저장한다.
+
+- .cer / .der : X.509 인증서 내용을 "바이너리 형태"로 저장한다.
+![x-509.cer](/encryption/image/certificate/x-509-cer.png)
+- .pem : X.509 인증서 내용을 "Base64로 인코딩"하여 저장한다.
+![x-509.pem](/encryption/image/certificate/x-509-pem.png)
