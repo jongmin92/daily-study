@@ -6,7 +6,7 @@
 ## 구조
 인증서에는 다양한 정보들을 포함하여 만들어진다.
 
-![certificate-structure-1](/encryption/image/certificate/certificate-structure-1.png)
+![certificate-structure-1](/security/image/certificate/certificate-structure-1.png)
 
 - 발급자
     - 공인 인증 기관이 인증서를 발급하기 때문에 인증 기관을 다른 말로 발급자라고 표현한다.
@@ -14,7 +14,7 @@
 - 발급자의 서명
     - 인증서에 기록될 여러 정보를 하나로 모은 후 해시 함수에 입력하여 해시 값을 얻어내고, 발급자의 암호화키(개인키)로 해당 해시값을 암호환 결과를 말한다.
 
-![certificate-structure-2](/encryption/image/certificate/certificate-structure-2.png)
+![certificate-structure-2](/security/image/certificate/certificate-structure-2.png)
 
 # PKI
 
@@ -27,7 +27,7 @@
 
 ## 구성 요소
 
-![pki-structure](/encryption/image/certificate/pki-structure.png)
+![pki-structure](/security/image/certificate/pki-structure.png)
 
 ## 인증 기관의 역할
 
@@ -74,7 +74,7 @@ X.509는 인증서의 표준 규격이다.
 - Certificate Signature Algorithm : 디지털 서명의 알고리즘 종류
 - Certificate Signature : 디지털 서명 값
 
-![x-509](/encryption/image/certificate/x-509.png)
+![x-509](/security/image/certificate/x-509.png)
 
 ## 인증서 파일 확장자
 X.509 표준의 인증서 형식은 ASN.1 (Abstract Syntax Notation One) 이라는 명명 규칙을 따른다. X.509 인증서의 각 구성 요소는 ASN.1 형식에 맞게 저장된다.
@@ -82,6 +82,6 @@ X.509 표준의 인증서 형식은 ASN.1 (Abstract Syntax Notation One) 이라�
 ASN.1 형식으로 되어 있는 X.509 인증서의 내용을 파일로 저장할 때 주로 두 가지 종류의 형식으로 저장한다.
 
 - .cer / .der : X.509 인증서 내용을 "바이너리 형태"로 저장한다.
-![x-509.cer](/encryption/image/certificate/x-509-cer.png)
+![x-509.cer](/security/image/certificate/x-509-cer.png)
 - .pem : X.509 인증서 내용을 "Base64로 인코딩"하여 저장한다.
-![x-509.pem](/encryption/image/certificate/x-509-pem.png)
+![x-509.pem](/security/image/certificate/x-509-pem.png)

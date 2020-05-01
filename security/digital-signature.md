@@ -15,7 +15,7 @@
 ## 과정
 Remind --> 인증기관이 제공하는 인증서를 인증기관이 보증해주기 위해서 서명을 하게 되는데, 이때 **서명이란 "공개키가 해시된 값"을 "인증기관의 비밀키"로 "암호화"하는 것**을 말한다. (= 디지털 서명)
 
-![digital-signature](/encryption/image/digital-signature/digital-signature.png)
+![digital-signature](/security/image/digital-signature/digital-signature.png)
 
 - 서명 (Signing)
     1. 인증기관이 제공받은 Data를 해싱한 후 인증기관의 비밀키로 암호화 한다. → 서명(Signature)
@@ -27,4 +27,4 @@ Remind --> 인증기관이 제공하는 인증서를 인증기관이 보증해�
 
 위의 내용을 바탕으로 SSL에 사용되는 인증서로 예를 들면 다음과 같은 과정을 거친다.
 
-![ssl-flow](/encryption/image/digital-signature/ssl-flow.png)
+![ssl-flow](/security/image/digital-signature/ssl-flow.png)

@@ -1,6 +1,6 @@
 # 대칭키 암호화
 
-![symmetric-key-encryption](/encryption/image/symmetric-asymmetric-key-encryption/symmetric-key-encryption.png)
+![symmetric-key-encryption](/security/image/symmetric-asymmetric-key-encryption/symmetric-key-encryption.png)
 
 - 송신자와 수산지가 동일한 비밀키 소유
 - 일반적으로 송신자는 암호용으로, 수신자는 복호용으로 사용
@@ -14,7 +14,7 @@ cc. https://www.devglan.com/corejava/java-aes-encypt-decrypt
 
 # 비대칭키 암호화
 
-![asymmetric-key-encryption](/encryption/image/symmetric-asymmetric-key-encryption/asymmetric-key-encryption.png)
+![asymmetric-key-encryption](/security/image/symmetric-asymmetric-key-encryption/asymmetric-key-encryption.png)
 
 - 사용자는 한 쌍의 키 (공개키/개인키) 생성
     - 공개키: 누구나 수신자의 공개키를 이용하여 암호문을 생성할 수 있다. → 공개키 암호화 방식이라고 부르는 이유
