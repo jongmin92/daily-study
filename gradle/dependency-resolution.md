@@ -39,4 +39,14 @@ Gradle은 의존성 그래프에 표시되는 모든 요청 버전을 고려한�
 
 Gradle은 [rich version declaration](https://docs.gradle.org/current/userguide/rich_versions.html) 개념을 지원하므로 가장 높은 버전은 버전이 선언된 방식에 따라 다르다.
 
-## Implementation conflict resolution
+## The Dependency Cache
+
+Gradle에는 매우 정교한 캐싱 메커니즘이 포함되어 있어서 의존성 해결 과정에서 remote request 수를 최소화한다.
+
+Gradle 의존성 캐시는 `GRADLE_USER_HOME/caches`에 있는 두 가지 storage 유형으로 구성된다.
+- POM 파일과 같은 metadata를 포함하는 jar 같은 바이너리 아티팩트의 파일 기반 저장소. 다운로드된 아티팩트의 storage 경로에는 SHA1 checksum을 포함한다. 이는 동일한 이름이지만 컨텐츠가 다른 2개의 아티팩트를 캐시 할 수 있음을 의미한다.
+- dynamic 버전, module descriptor, 아티팩트 해결 결과를 포함한 해결 된 module metadata의 바이너리 저장소.
+
+### Chache Cleanup
+
+Gradle은 어떤 의존성 캐시를 사용했는지에 대한 정보를 유지한다. 이 정보를 사용해서 30일 이상 사용되지 않은 아티팩트에 대해 캐시를 정기적으로 최대 24시간 마다 스캔한다. 사용되지 않는 아티팩트는 삭제해서 캐시가 무한하게 커지지 않도록한다.
