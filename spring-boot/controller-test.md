@@ -1,5 +1,7 @@
 # Controller Test
 
+> example-code: https://github.com/jongmin92/code-examples/tree/master/spring-boot/controller-test
+
 Spring Boot에서 Controller(Web layer)를 테스트하는 방법은 여러 가지가 있다. 방법에 따라 Unit Test와 Integration Test를 모두 작성할 수 있다.
 
 - Inside-Server Test
@@ -214,4 +216,60 @@ public class PersonControolerSpringBootMockTest {
 
 ### 4. SpringBootTest with a Real WebServer
 
-![strategy-4](/spring-boot/image/controller-test/strategy-2.png)
+![strategy-4](/spring-boot/image/controller-test/strategy-4.png)
+
+`WebEnvironment.RANDOM_PORT` 또는 `WebEnvironment.DEFINED_PORT`와 함께 `@SpringBootTest`를 사용하는 경우 실제 HTTP server를 로드한다. 이 경우 RestTemplate 또는 TestRestTemplate을 사용해서 테스트해야 한다.
+
+```java
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+public class PersonControllerSpringBootTest {
+
+    @MockBean
+    private PersonService personService;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    public void getPersonByNameWhenExists() {
+        final Person person = new Person("name", 10);
+        when(personService.getPerson("name"))
+                .thenReturn(person);
+
+        final ResponseEntity<Person> response = restTemplate.getForEntity("/persons/name", Person.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(person);
+    }
+
+    @Test
+    public void handleNonExistingPersonException() {
+        when(personService.getPerson(anyString()))
+                .thenThrow(NonExistingPersonException.class);
+
+        final ResponseEntity<Person> response = restTemplate.getForEntity("/persons/name", Person.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void headerIsPresent() {
+        final Person person = new Person("name", 10);
+        when(personService.getPerson("name"))
+                .thenReturn(person);
+
+        final ResponseEntity<Person> response = restTemplate.getForEntity("/persons/name", Person.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getHeaders().get("X-HEADER-1")).containsOnly("filter-value");
+        assertThat(response.getHeaders().get("X-HEADER-2")).containsOnly("interceptor-value");
+    }
+}
+```
+
+**1. MockMVC in Standalone Mode** 방식이 다른 방식보다 성능면에서 더 좋다고 생각할 수도 있다. 반대로 Spring Boot Context를 생성하고 HTTP Server까지 띄우는 **4. SpringBootTest with a Real WebServer
+** 방식은 매우 비효율적이라고 생각할 수 있다.
+완전히 맞는 말은 아니다. 그 이유는 동일한 Test Suite에 대해서는 application context가 기본적으로 재사용되기 때문이다.
+
+그러나, 테스트에서 Spring bean을 수정하는 경우 context를 재사용하면 side effect가 발생할 수 있다. 이 경우에는 `@DirtiesContext`를 사용해서 각 테스트 전에 context를 다시 로드하도록 해야한다.
