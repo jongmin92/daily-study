@@ -268,8 +268,7 @@ public class PersonControllerSpringBootTest {
 }
 ```
 
-**1. MockMVC in Standalone Mode** 방식이 다른 방식보다 성능면에서 더 좋다고 생각할 수도 있다. 반대로 Spring Boot Context를 생성하고 HTTP Server까지 띄우는 **4. SpringBootTest with a Real WebServer
-** 방식은 매우 비효율적이라고 생각할 수 있다.
+**1. MockMVC in Standalone Mode** 방식이 다른 방식보다 성능면에서 더 좋다고 생각할 수도 있다. 반대로 Spring Boot Context를 생성하고 HTTP Server까지 띄우는 **4. SpringBootTest with a Real WebServer** 방식은 매우 비효율적이라고 생각할 수 있다.
 완전히 맞는 말은 아니다. 그 이유는 동일한 Test Suite에 대해서는 application context가 기본적으로 재사용되기 때문이다.
 
 그러나, 테스트에서 Spring bean을 수정하는 경우 context를 재사용하면 side effect가 발생할 수 있다. 이 경우에는 `@DirtiesContext`를 사용해서 각 테스트 전에 context를 다시 로드하도록 해야한다.
