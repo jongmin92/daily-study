@@ -2,6 +2,7 @@
 Spring Boot와 Gradle을 함께 사용할 때 의존성 버전을 결정하는 방법에는 여러가지가 있다.
 
 ## io.spring.depedency-management
+- Gradle 5.0 이전 버전은 Maven BOM을 지원하지 않아서 spring의 depedency-management 플러그인을 사용하면 된다.
 - `org.springframework.boot`랑 같이 쓰이면 자동으로 org.springframework.boot의 버전으로 BOM 설정하는 기능
   - 별도의 configuration 없이는 동작 안 함. 근데 그거에 대한 디폴트 설정을 org.springframework.boot 가 가지고 있음. (자기 자신의 버전과 동일한 BOM을 설정함.)
 - BOM에 선언된 버전으로 '버전이 설정되지 않은 컴포넌트의 버전을 설정해 준다'
@@ -9,6 +10,7 @@ Spring Boot와 Gradle을 함께 사용할 때 의존성 버전을 결정하는 �
 - BOM Property를 지원
 
 ## platform
+- Gradle 5.0부터 지원한다.
 - java-platform 플러그인에서 제공하며, 프로젝트 또는 BOM을 통한 통합 버전 관리
 - 의존성 선언에서 버전이 없거나, 낮은 버전이 기록되어 있을 때 BOM에 적힌 버전으로 교체
 - 높은 버전으로 의존성의 버전업하는 것은 Gradle의 기본 정책이라 문제 없고, 낮은 버전으로 낮추려면 정책 설정을 하거나 force를 써야 함
