@@ -1,6 +1,5 @@
 # Use bill of materials (BOM) As Dependency Constraints
-Gradle 5부터 빌드 파일에서 BOM을 사용해 쉽게 권장되는 의존성 버전을 얻을 수 있다. BOM에 정의된 의존성 버전은 Gradle의 의존성 제한 조건이다. 즉, BOM에 정의된 의존성 제약 조건을 통해 버전이 해결(resolve)되므로 BOM
-에 포함된 의존성에 대해서는 빌드 파일에 버전을 명시할 필요 없다. 전이 의존성(transitive dependency) 버전 또한 BOM을 사용해서 해결된다. 
+Gradle 5부터 빌드 파일에서 BOM을 사용해 쉽게 권장되는 의존성 버전을 얻을 수 있다. BOM에 정의된 의존성 버전은 Gradle의 의존성 제한 조건이다. 즉, BOM에 정의된 의존성 제약 조건을 통해 버전이 해결(resolve)되므로 BOM에 포함된 의존성에 대해서는 빌드 파일에 버전을 명시할 필요 없다. 전이 의존성(transitive dependency) 버전 또한 BOM을 사용해서 해결된다.
 
 BOM 파일을 import 하기 위해서 의존성 핸들러 메서드인 `platform`을 사용할 수 있다. BOM에 정의된 버전이 권장사항이지만, BOM에 정의된 버전을 빌드 파일에서 명시적(explicit) 버전으로 지정함으로써 대체할 수 있다.
 

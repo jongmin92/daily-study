@@ -16,7 +16,7 @@ Spring Boot와 Gradle을 함께 사용할 때 의존성 버전을 결정하는 �
 - 높은 버전으로 의존성의 버전업하는 것은 Gradle의 기본 정책이라 문제 없고, 낮은 버전으로 낮추려면 정책 설정을 하거나 force를 써야 함
 
 ## enforcedPlatform 
-- 다 platform이랑 똑같은데 얘는 높은 버전이든 낮은 버전이든 BOM에 적인 버전으로 전부 강제
+- 다 platform이랑 똑같은데 얘는 높은 버전이든 낮은 버전이든 BOM에 적힌 버전으로 전부 강제
 
 
 **결과적으로 버전을 바꾸러면 force나 정책으로 해결해거나 platform project에서 적당히 exclude해서 처리해야 함**
